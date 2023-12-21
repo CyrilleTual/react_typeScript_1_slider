@@ -1,36 +1,44 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import sliderData from "../../data/sliderData";
 import Card from "../Card/Index";
 import { ReactComponent as Left } from "../../assets/left-arrow.svg";
 import { ReactComponent as Right } from "../../assets/right-arrow.svg";
+import { ReactComponent as Pause } from "../../assets/pause.svg";
+import { ReactComponent as Play } from "../../assets/play.svg";
 import style from "./slider.module.css";
+
+// Define type for states
+
+type StandByType = boolean;
 
 function Slider() {
   // index of selected picture
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState<number>(0);
 
-  // pour le défilement automatique
+  // bouton pause
+  const [standBy, setStandBy] = useState<StandByType>(false);
 
-  useEffect(() => {
-    // appel d'une fonction à intervalle régulier
-    const intervalId: NodeJS.Timer = setInterval(
-      handleClick,
-      5500,
-      index,
-      "next"
-    );
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [index]);
-
-  function handleClick(index: number, action: "previous" | "next"): void {
-    if (action === "previous") {
-      index > 0 ? setIndex(index - 1) : setIndex(sliderData.length - 1);
-    } else {
-      index < sliderData.length - 1 ? setIndex(index + 1) : setIndex(0);
-    }
+  function handleClick(action: 1 | -1): void {
+    // pour avoir tout de suite valeur a jour de l'index on passe une fonction callback
+    setIndex((state): number => {
+      if (state + action < 0) {
+        return sliderData.length - 1;
+      } else if (state + action >= sliderData.length) {
+        return 0;
+      } else {
+        return state + action;
+      }
+    });
   }
+
+  //pour le défilement automatique
+  useEffect(() => {
+    if (!standBy) {
+      // appel d'une fonction à intervalle régulier
+      const intervalId = setInterval(() => handleClick(1), 3500);
+      return () => clearInterval(intervalId); // évite les fuites de mémoire
+    }
+  }, [standBy]);
 
   return (
     <div className={style.wrapper}>
@@ -44,15 +52,31 @@ function Slider() {
           <Card index={index} />
           <button
             className={`${style.btn} ${style.leftBtn}`}
-            onClick={() => handleClick(index, "previous")}
+            onClick={() => handleClick(-1)}
           >
             <Left width="100%" height="100%" />
           </button>
           <button
             className={`${style.btn} ${style.rightBtn}`}
-            onClick={() => handleClick(index, "next")}
+            onClick={() => handleClick(1)}
           >
             <Right width="100%" height="100%" />
+          </button>
+          <button
+            className={`${style.btn} ${style.standBy} ${
+              standBy && style.paused
+            }`}
+            onClick={() =>
+              setStandBy(() => {
+                return !standBy;
+              })
+            }
+          >
+            {standBy ? (
+              <Play width="100%" height="100%" />
+            ) : (
+              <Pause width="100%" height="100%" />
+            )}
           </button>
         </div>
       </div>
