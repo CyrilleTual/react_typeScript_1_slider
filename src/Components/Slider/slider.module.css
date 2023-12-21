@@ -58,23 +58,25 @@
   right: -60px;
 }
 .standBy{
-    background-color: #ffffff96;
+     
     right: 50%;
     transform: translateX(+50%);
     top: calc(100% + 20px);
 }
 
-.paused{
-    background-color: grey;
+.standBy svg {
+    fill:#fff;
+    width: 80%;
 }
+ 
 
 @media screen and (max-width: 700px) {
-  .btn {
+  .leftBtn, .rightBtn  {
     background-color: rgba(0, 0, 0, 0.507);
     width: 40px;
     height: 40px;
   }
-  .btn:hover {
+ .leftBtn:hover, .rightBtn:hover {
     background: rgba(0, 0, 0, 0.802);
   }
   .leftBtn {

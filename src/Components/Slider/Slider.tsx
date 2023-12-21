@@ -73,9 +73,9 @@ function Slider() {
             }
           >
             {standBy ? (
-              <Play width="100%" height="100%" />
+              <Play />
             ) : (
-              <Pause width="100%" height="100%" />
+              <Pause />
             )}
           </button>
         </div>
