@@ -7,13 +7,10 @@ type CardProps = {
 
 function Card({ index }: CardProps) {
   return (
-    <>
-      <div>Card</div>
-      <img
-        src={`/img/img-${sliderData[index].id}.jpg`}
-        alt={sliderData[index].description}
-      />
-    </>
+    <img
+      src={`/img/img-${sliderData[index].id}.jpg`}
+      alt={sliderData[index].description}
+    />
   );
 }
 
